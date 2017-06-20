@@ -1,0 +1,12 @@
+{
+  "name": "fred",
+  "version": "1.0.0",
+  "description": "A Javascript port of FRED",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Stephen McArdle",
+  "license": "ISC"
+}
