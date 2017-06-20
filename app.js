@@ -2,7 +2,7 @@ const classes = require("./classes");
 const Person = classes.Person;
 const Population = classes.Population;
 const Disease = classes.Disease;
-const csv2array = require('csv-to-array');
+//const csv2array = require('csv-to-array');
 var os = require('os');
 
 var NUM_SIM_DAYS = 100;
@@ -10,6 +10,10 @@ var NUM_SIM_DAYS = 100;
 var person_array = [];
 var population_array = [];
 var disease_array = [];
+const DISEASE_LIST = new Map([["Influenza", 2.5], ["Diphtheria", 6.5], 
+["Smallpox", 6], ["Polio", 6], ["Rubella", 6], 
+["Mumps", 5.5], ["HIV", 3.5], ["Pertussis", 5.5], 
+["SARS", 3.5], ["Ebola", 2]]);
 
 function createNewPerson(sex, race) {
 	var age = Math.floor(Math.random() * 101);
