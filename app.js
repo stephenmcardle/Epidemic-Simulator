@@ -2,7 +2,7 @@ const classes = require("./classes");
 const Person = classes.Person;
 const Population = classes.Population;
 const Disease = classes.Disease;
-//const csv2array = require('csv-to-array');
+const csv2array = require('csv-to-array');
 var os = require('os');
 
 var NUM_SIM_DAYS = 100;
