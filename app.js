@@ -48,8 +48,8 @@ function step(pop) {
 function main() {
 	console.log("\nSTARTING SIMULATION");
 	//create new diseases
-	createNewDisease("HIV");
-	createNewDisease("Influenza");
+	createNewDisease("HIV", DISEASE_LIST.get("HIV"));
+	createNewDisease("Influenza", DISEASE_LIST.get("Influenza"));
 	//Infect a random person with each disease to start the spread
 	for (let p = 0; p < population_array.length; p++) {
 		var currPop = population_array[p];
