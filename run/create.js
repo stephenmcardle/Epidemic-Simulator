@@ -17,8 +17,8 @@ module.exports = {
 	  	population_array.push(pop);
 	},
 
-	newDisease: function(name) {
-		var disease = new Disease(name);
+	newDisease: function(name, r0val) {
+		var disease = new Disease(name, r0val);
 		disease_array.push(disease);
 	}
 
