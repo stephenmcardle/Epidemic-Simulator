@@ -1,43 +1,27 @@
-const classes = require("./classes");
-const Person = classes.Person;
-const Population = classes.Population;
-const Disease = classes.Disease;
 const csv2array = require('csv-to-array');
+const run = require("./run");
+const create = run.create;
 var os = require('os');
 
 var NUM_SIM_DAYS = 100;
 
-var person_array = [];
-var population_array = [];
-var disease_array = [];
+// These variables are global so they can be accessed in the ./run directory
+person_array = []; //this gets copied into pop.members
+population_array = [];
+disease_array = [];
+
 const DISEASE_LIST = new Map([["Influenza", 2.5], ["Diphtheria", 6.5], 
 ["Smallpox", 6], ["Polio", 6], ["Rubella", 6], 
 ["Mumps", 5.5], ["HIV", 3.5], ["Pertussis", 5.5], 
 ["SARS", 3.5], ["Ebola", 2]]);
 
-function createNewPerson(sex, race) {
-	var age = Math.floor(Math.random() * 101);
-	var person = new Person(age, sex, race, 2017 - age);
-	person_array.push(person);
-}
-
-function createNewPopulation(arr) {
-	var pop = new Population(person_array);
-  	population_array.push(pop);
-}
-
-function createNewDisease(name) {
-	var disease = new Disease(name);
-	disease_array.push(disease);
-}
-
 function step(pop) {
 	for (var i = 0; i < disease_array.length; i++) { // for disease in diseases
-		for (var j = 0; j < pop.person_array.length; j++) { // for person in population
+		for (var j = 0; j < pop.members.length; j++) { // for person in population
 			//If a random number is less than the number of people infected by this disease in the current population, become infected
 			//These numbers were chosen arbitrarily for testing purposes and should be changed later to more realistic numbers
-			if (Math.floor(Math.random() * (pop.person_array.length) < (pop.getNumInfected(disease_array[i].getId())))) {
-				pop.person_array[j].becomeInfected(disease_array[i]);
+			if (Math.floor(Math.random() * (pop.members.length) < (pop.getNumInfected(disease_array[i].getId())))) {
+				pop.members[j].becomeInfected(disease_array[i]);
 			}
 		}
 	}
@@ -48,12 +32,12 @@ function step(pop) {
 function main() {
 	console.log("\nSTARTING SIMULATION");
 	//create new diseases
-	createNewDisease("HIV", DISEASE_LIST.get("HIV"));
-	createNewDisease("Influenza", DISEASE_LIST.get("Influenza"));
+	create.newDisease("HIV");//, DISEASE_LIST.get("HIV"));
+	create.newDisease("Influenza");//, DISEASE_LIST.get("Influenza"));
 	//Infect a random person with each disease to start the spread
 	for (let p = 0; p < population_array.length; p++) {
 		var currPop = population_array[p];
-		var people = currPop.person_array;
+		var people = currPop.members;
 		console.log("\nPopulation", currPop.getId(), '\n');
 		for (let i = 0; i < disease_array.length; i++) {
 			let person_to_infect = Math.floor(Math.random() * (people.length));
@@ -84,13 +68,12 @@ csv2array({file: "data/sample_density.csv", columns: columns},
 		for (i = 0; i < array.length; i++) {
 			person_array = [];
  			for (var j = 0; j < array[i]['pop']; j++) {
-				createNewPerson('M', 'White');
+				create.newPerson('M', 'White');
   			}
-  			createNewPopulation(person_array);
+  			create.newPopulation(person_array);
   		}
   		for (i = 0; i < population_array.length; i++) {
-  			console.log(population_array[i].person_array.length);
+  			console.log(population_array[i].members.length);
   		}
   		main();
-  		console.log(os.freemem());
 });

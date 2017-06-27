@@ -7,32 +7,32 @@ function isInRange(low, value, high) {
 
 function Population(arr) {
 	var _id = pop_ID++;
-	this.person_array = arr;
+	this.members = arr;
 	this.numInfected = {};
 
 	this.getId = function() {
 		return _id;
 	}
 	
-	for (let i = 0; i < this.person_array.length; i++) {
-		this.person_array[i].setPopulation(this);
-		//console.log(this.person_array[i].population.getId());
+	for (let i = 0; i < this.members.length; i++) {
+		this.members[i].setPopulation(this);
+		//console.log(this.members[i].population.getId());
 	}
 }
 
 Population.prototype = {
 	print: function() {
 		console.log("Population " + this.getId() + " contains:");
-		for (let i = 0; i < this.person_array.length; i++) {
-			this.person_array[i].printDemographics();
+		for (let i = 0; i < this.members.length; i++) {
+			this.members[i].printDemographics();
 			console.log();
 		}
 	},
 	printAgeDistribution: function() {
 		var p0 = p20 = p40 = p60 = p80 = 0;
 		console.log("Population " + this.getId() + " age distribution:");
-		for (let i = 0; i < this.person_array.length; i++) {
-			let curr_age = this.person_array[i].demographics.age;
+		for (let i = 0; i < this.members.length; i++) {
+			let curr_age = this.members[i].demographics.age;
 			if (curr_age < 20) {
 				p0++;
 			} else if (isInRange(20, curr_age, 40)) {
@@ -52,8 +52,8 @@ Population.prototype = {
 		console.log('80+   :', p80);
 	},
 	printInfections: function() {
-		for (let i = 0; i < this.person_array.length; i++) {
-			console.log("Person " + this.person_array[i].getId() + " has infections: " + Array.from(this.person_array[i].infections));
+		for (let i = 0; i < this.members.length; i++) {
+			console.log("Person " + this.members[i].getId() + " has infections: " + Array.from(this.members[i].infections));
 		}
 	},
 	incrementNumInfected: function(diseaseId) {
