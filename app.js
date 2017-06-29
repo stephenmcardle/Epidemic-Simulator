@@ -29,6 +29,30 @@ function step(pop, day) {
 			if (Math.floor(Math.random() * (pop.members.length) < (pop.getNumInfected(disease_array[i].getId())))) {
 				pop.members[j].becomeInfected(disease_array[i]);
 			}
+			/*
+			Should we do separate test and create a new random number for each? like
+				if (Math.random() < chance_to_interact)
+					if (Math.random() < chance_to_get_infected)
+						if (Math.random() < ....)
+							person.becomeInfected()
+			Or one test like
+				if (Math.random() < chance_to_interact * chance_to_get_infected * ....)
+					person.becomeInfected()
+			*/
+			
+			/* 
+			//pseudo-code for infections
+			//for each person except the current person
+			for (var k = 0; k < pop.members.length - 1; k++) {
+				generate a new random number for every interaction
+				if (pop.members[k].is_infected) {
+					//what else do we need to consider for the probability?
+					if (Math.random() < day_specific_contact_rate * disease.transmissibility * ...) {
+						pop.members[j].becomeInfected();
+					}
+				}
+			}
+			*/
 		}
 	}
 	// Uncomment the next line for a daily report of each population
@@ -72,7 +96,8 @@ function main() {
 }
 
 
-//testing csv-to-array module
+//Read in population file
+//Eventually this has to be changed to an api call based on user input (location)
 var columns = ["lat", "lon", "pop"];
 csv2array({file: "data/sample_density.csv", columns: columns},
 	function (err, array) {
