@@ -15,7 +15,13 @@ const DISEASE_LIST = new Map([["Influenza", 2.5], ["Diphtheria", 6.5],
 ["Mumps", 5.5], ["HIV", 3.5], ["Pertussis", 5.5], 
 ["SARS", 3.5], ["Ebola", 2]]);
 
-function step(pop) {
+function step(pop, day) {
+	var day_specific_prob;
+	if (day == 0 || day == 1) {
+		day_specific_prob = 1.5
+	} else {
+		day_specific_prob = 1;
+	}
 	for (var i = 0; i < disease_array.length; i++) { // for disease in diseases
 		for (var j = 0; j < pop.members.length; j++) { // for person in population
 			//If a random number is less than the number of people infected by this disease in the current population, become infected
@@ -44,13 +50,20 @@ function main() {
 			people[person_to_infect].becomeInfected(disease_array[i]);
 			console.log("Person " + people[person_to_infect].getId() + " starts with disease " + i);
 		}
-		//Perform daily operations
-		for (i = 0; i < NUM_SIM_DAYS; i++) {
-			//console.log("\nDAY", i + ":");
-			step(currPop); // TODO merge populations and add the chance for them to interact (like neighborhoods in FRED)
-		}
-		//currPop.printInfections();
 	}
+	//Perform daily operations
+	var day_of_week = 0;
+	for (i = 0; i < NUM_SIM_DAYS; i++) {
+		if (day_of_week === 7) {
+			day_of_week = 0;
+		}
+		for (let p = 0; p < population_array.length; p++) {
+			var currPop = population_array[p];
+			step(currPop, day_of_week);
+		}
+		day_of_week++;
+	}
+	//currPop.printInfections();
 	console.log();
 	for (let i = 0; i < disease_array.length; i++) {
 		disease_array[i].printTotalInfected();
