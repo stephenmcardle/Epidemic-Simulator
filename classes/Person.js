@@ -14,7 +14,8 @@ function Person(age, sex, race, dob) {
 	this.original = false;
 	*/
 	this.demographics = new Demographics(this._id, age, sex, race, /*rel, day, today_is_birthday,*/ dob);
-	this.infections = new Set();
+	this.infections = new Set(); // this might be unnecessary with the addition of days_infected
+	this.days_infected = {};
 
 	this.getId = function() {
 		return _id;
@@ -40,6 +41,7 @@ Person.prototype = {
 	},
 	becomeInfected: function(disease) {
 		this.infections.add(disease.getId());
+		this.days_infected[disease.getId()] = 1;
 		disease.totalInfected++;
 		this.getPopulation().incrementNumInfected(disease.getId());
 	}

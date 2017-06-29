@@ -23,11 +23,21 @@ function step(pop, day) {
 		day_specific_prob = 1;
 	}
 	for (var i = 0; i < disease_array.length; i++) { // for disease in diseases
+		currDisease = disease_array[i];
 		for (var j = 0; j < pop.members.length; j++) { // for person in population
+			currMember = pop.members[j];
+			if (currMember.infections.has(currDisease.getId())) {
+				//console.log("Person " + currMember.getId() + " has had " + currDisease.name + " for " + currMember.days_infected[currDisease.getId()] + " days");
+				//calculate if the person should die today
+				//if yes, increment number dead, decrement number infected, remove from pop
+				//else, increment days_infected for current disease
+				currMember.days_infected[currDisease.getId()]++;
+				continue;
+			}
 			//If a random number is less than the number of people infected by this disease in the current population, become infected
 			//These numbers were chosen arbitrarily for testing purposes and should be changed later to more realistic numbers
 			if (Math.floor(Math.random() * (pop.members.length) < (pop.getNumInfected(disease_array[i].getId())))) {
-				pop.members[j].becomeInfected(disease_array[i]);
+				currMember.becomeInfected(disease_array[i]);
 			}
 			//We have to decide if we want to create a random number for each interaction,
 			//or just multiply by num_infected. The second way will be much slower (n^2 instead of n) but probably more realistic?
