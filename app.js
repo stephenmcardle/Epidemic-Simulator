@@ -29,8 +29,10 @@ function step(pop, day) {
 			if (Math.floor(Math.random() * (pop.members.length) < (pop.getNumInfected(disease_array[i].getId())))) {
 				pop.members[j].becomeInfected(disease_array[i]);
 			}
+			//We have to decide if we want to create a random number for each interaction,
+			//or just multiply by num_infected. The second way will be much slower (n^2 instead of n) but probably more realistic?
 			/*
-			Should we do separate test and create a new random number for each? like
+			Should we do separate tests and create a new random number for each? like
 				if (Math.random() < chance_to_interact)
 					if (Math.random() < chance_to_get_infected)
 						if (Math.random() < ....)
