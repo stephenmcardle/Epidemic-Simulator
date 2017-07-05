@@ -1,12 +1,19 @@
 var disease_ID = 0;
 
-function Disease(name, r0val) {
-	var ratio = r0val / 2.5;
+function Disease(name, diseaseInfo) {
+	var ratio = diseaseInfo[0] / 2.5;
 	var _id = disease_ID++;
 	this.name = name;
 	this.currentInfected = 0;
 	this.totalInfected = 0;
 	this.totalKilled = 0;
+
+	this.fatalityRateUnVacc = diseaseInfo[1] / 100;
+	if (diseaseInfo[2]) {
+		this.fatalityRateVacc = diseaseInfo[2] / 100;
+	} else {
+		this.fatalityRateVacc = this.fatalityRateUnVacc;
+	}
 	
 	//TODO figure out where we're going to get the data for these parameters
 
@@ -25,6 +32,7 @@ function Disease(name, r0val) {
 	this.days_incubating = 3 * ratio;
 	this.days_symptomatic = 7 * ratio;
 	
+	console.log(this.name, this.fatalityRateUnVacc);
 
 	/*
 	this->natural_history = null;
@@ -46,6 +54,9 @@ function Disease(name, r0val) {
 Disease.prototype = {
 	printTotalInfected: function() {
 		console.log("Disease " + this.getId() + ": " + this.name + " has infected " + this.totalInfected + " people.");
+	},
+	printTotalKilled: function() {
+		console.log("Disease " + this.getId() + ": " + this.name + " has killed " + this.totalKilled + " people.");
 	}
 }
 

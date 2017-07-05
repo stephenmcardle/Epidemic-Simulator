@@ -10,10 +10,12 @@ person_array = []; //this gets copied into pop.members
 population_array = [];
 disease_array = [];
 
-const DISEASE_LIST = new Map([["Influenza", 2.5], ["Diphtheria", 6.5], 
-["Smallpox", 6], ["Polio", 6], ["Rubella", 6], 
-["Mumps", 5.5], ["HIV", 3.5], ["Pertussis", 5.5], 
-["SARS", 3.5], ["Ebola", 2]]);
+const DISEASE_LIST = {
+	"Influenza": [2.5, 0.75], "Diphtheria": [6.5, 7.5], "Smallpox": [6, 30, 3], 
+	"Polio": [6], "Rubella": [6], "Mumps": [5.5, 1], "HIV": [3.5, 85], 
+	"Pertussis": [5.5, 2.35], "SARS": [3.5, 11], "Ebola": [2, 50]
+};
+
 
 function step(pop, day) {
 	var day_specific_prob;
@@ -28,9 +30,10 @@ function step(pop, day) {
 			currMember = pop.members[j];
 			if (currMember.infections.has(currDisease.getId())) {
 				//console.log("Person " + currMember.getId() + " has had " + currDisease.name + " for " + currMember.days_infected[currDisease.getId()] + " days");
-				if (Math.random() < currDisease.fatalityRate + currMember.days_infected * .01) { //not sure about this condition yet
+				if (Math.random() < (currDisease.fatalityRateUnVacc + currMember.days_infected[currDisease.getId()] * 0.00001)) { //not sure about this condition yet
 					currMember.becomeDead(currDisease);
 					j--;
+					//console.log("Person " + currMember.getId() + " died after having " + currDisease.name + " for " + currMember.days_infected[currDisease.getId()] + " days");
 				} else {
 					currMember.days_infected[currDisease.getId()]++;
 				}
@@ -76,8 +79,8 @@ function step(pop, day) {
 function main() {
 	console.log("\nSTARTING SIMULATION");
 	//create new diseases
-	create.newDisease("HIV", DISEASE_LIST.get("HIV"));
-	create.newDisease("Influenza", DISEASE_LIST.get("Influenza"));
+	create.newDisease("HIV", DISEASE_LIST["HIV"]);
+	create.newDisease("Influenza", DISEASE_LIST["Influenza"]);
 	//Infect a random person with each disease to start the spread
 	for (let p = 0; p < population_array.length; p++) {
 		var currPop = population_array[p];
@@ -105,6 +108,7 @@ function main() {
 	console.log();
 	for (let i = 0; i < disease_array.length; i++) {
 		disease_array[i].printTotalInfected();
+		disease_array[i].printTotalKilled();
 	}
 	console.log("\nSimulation finished");
 }

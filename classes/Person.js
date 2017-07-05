@@ -49,7 +49,7 @@ Person.prototype = {
 	becomeDead: function(disease) {
 		//remove from population
 		let i = this.getPopulation().members.indexOf(this);
-		this.getPopulation().splice(i, 1);
+		this.getPopulation().members.splice(i, 1);
 	
 		disease.currentInfected--;
 		disease.totalKilled++;
