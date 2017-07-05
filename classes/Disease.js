@@ -4,7 +4,9 @@ function Disease(name, r0val) {
 	var ratio = r0val / 2.5;
 	var _id = disease_ID++;
 	this.name = name;
+	this.currentInfected = 0;
 	this.totalInfected = 0;
+	this.totalKilled = 0;
 	
 	//TODO figure out where we're going to get the data for these parameters
 

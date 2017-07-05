@@ -42,8 +42,17 @@ Person.prototype = {
 	becomeInfected: function(disease) {
 		this.infections.add(disease.getId());
 		this.days_infected[disease.getId()] = 1;
+		disease.currentInfected++;
 		disease.totalInfected++;
 		this.getPopulation().incrementNumInfected(disease.getId());
+	},
+	becomeDead: function(disease) {
+		//remove from population
+		let i = this.getPopulation().members.indexOf(this);
+		this.getPopulation().splice(i, 1);
+	
+		disease.currentInfected--;
+		disease.totalKilled++;
 	}
 };
 

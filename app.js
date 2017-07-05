@@ -28,16 +28,18 @@ function step(pop, day) {
 			currMember = pop.members[j];
 			if (currMember.infections.has(currDisease.getId())) {
 				//console.log("Person " + currMember.getId() + " has had " + currDisease.name + " for " + currMember.days_infected[currDisease.getId()] + " days");
-				//calculate if the person should die today
-				//if yes, increment number dead, decrement number infected, remove from pop
-				//else, increment days_infected for current disease
-				currMember.days_infected[currDisease.getId()]++;
+				if (Math.random() < currDisease.fatalityRate + currMember.days_infected * .01) { //not sure about this condition yet
+					currMember.becomeDead(currDisease);
+					j--;
+				} else {
+					currMember.days_infected[currDisease.getId()]++;
+				}
 				continue;
 			}
 			//If a random number is less than the number of people infected by this disease in the current population, become infected
 			//These numbers were chosen arbitrarily for testing purposes and should be changed later to more realistic numbers
-			if (Math.floor(Math.random() * (pop.members.length) < (pop.getNumInfected(disease_array[i].getId())))) {
-				currMember.becomeInfected(disease_array[i]);
+			if (Math.floor(Math.random() * (pop.members.length) < (pop.getNumInfected(currDisease.getId())))) {
+				currMember.becomeInfected(currDisease);
 			}
 			//We have to decide if we want to create a random number for each interaction,
 			//or just multiply by num_infected. The second way will be much slower (n^2 instead of n) but probably more realistic?
