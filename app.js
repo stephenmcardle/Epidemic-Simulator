@@ -4,6 +4,7 @@ const create = run.create;
 var os = require('os');
 
 var NUM_SIM_DAYS = 100;
+var numberOfInteractions = 15;
 
 // These variables are global so they can be accessed in the ./run directory
 person_array = []; //this gets copied into pop.members
@@ -18,16 +19,40 @@ const DISEASE_LIST = {
 
 
 function step(pop, day) {
-	var day_specific_prob;
+	var daySpecificProb;
 	if (day == 0 || day == 1) {
-		day_specific_prob = 1.5
+		daySpecificProb = 1.5
 	} else {
-		day_specific_prob = 1;
+		daySpecificProb = 1;
 	}
 	for (var i = 0; i < disease_array.length; i++) { // for disease in diseases
 		currDisease = disease_array[i];
 		for (var j = 0; j < pop.members.length; j++) { // for person in population
 			currMember = pop.members[j];
+			
+			//build array of size numberOfInteractions * daySpecificProb of random people to interact with
+			var interactWith = [];
+			for (let k = 0; k < numberOfInteractions * daySpecificProb; k++) {
+				let personToInteractWith = Math.floor(Math.random() * (pop.members.length));
+				interactWith.push(pop.members[personToInteractWith]);
+			}
+			for (let k = 0; k < interactWith.length; k++) {
+				if (currMember.infections.has(currDisease.getId())) {
+					if (!interactWith[k].infections.has(currDisease.getId())) {
+						if (Math.random() < currDisease.transmissibility) {
+							interactWith[k].becomeInfected(currDisease);
+						}
+					}
+				} else {
+					if (interactWith[k].infections.has(currDisease.getId())) {
+						if (Math.random() < currDisease.transmissibility) {
+							currMember.becomeInfected(currDisease);
+						}
+					}
+				}
+			}
+
+			// at the end of the day, calculate if this person should die
 			if (currMember.infections.has(currDisease.getId())) {
 				//console.log("Person " + currMember.getId() + " has had " + currDisease.name + " for " + currMember.days_infected[currDisease.getId()] + " days");
 				if (Math.random() < (currDisease.fatalityRateUnVacc + currMember.days_infected[currDisease.getId()] * 0.00001)) { //not sure about this condition yet
@@ -37,8 +62,8 @@ function step(pop, day) {
 				} else {
 					currMember.days_infected[currDisease.getId()]++;
 				}
-				continue;
 			}
+			/*
 			//If a random number is less than the number of people infected by this disease in the current population, become infected
 			//These numbers were chosen arbitrarily for testing purposes and should be changed later to more realistic numbers
 			if (Math.floor(Math.random() * (pop.members.length) < (pop.getNumInfected(currDisease.getId())))) {
