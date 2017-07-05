@@ -63,38 +63,6 @@ function step(pop, day) {
 					currMember.days_infected[currDisease.getId()]++;
 				}
 			}
-			/*
-			//If a random number is less than the number of people infected by this disease in the current population, become infected
-			//These numbers were chosen arbitrarily for testing purposes and should be changed later to more realistic numbers
-			if (Math.floor(Math.random() * (pop.members.length) < (pop.getNumInfected(currDisease.getId())))) {
-				currMember.becomeInfected(currDisease);
-			}
-			//We have to decide if we want to create a random number for each interaction,
-			//or just multiply by num_infected. The second way will be much slower (n^2 instead of n) but probably more realistic?
-			/*
-			Should we do separate tests and create a new random number for each? like
-				if (Math.random() < chance_to_interact)
-					if (Math.random() < chance_to_get_infected)
-						if (Math.random() < ....)
-							person.becomeInfected()
-			Or one test like
-				if (Math.random() < chance_to_interact * chance_to_get_infected * ....)
-					person.becomeInfected()
-			*/
-			
-			/* 
-			//pseudo-code for infections
-			//for each person except the current person
-			for (var k = 0; k < pop.members.length - 1; k++) {
-				generate a new random number for every interaction
-				if (pop.members[k].is_infected) {
-					//what else do we need to consider for the probability?
-					if (Math.random() < day_specific_contact_rate * disease.transmissibility * ...) {
-						pop.members[j].becomeInfected();
-					}
-				}
-			}
-			*/
 		}
 	}
 	// Uncomment the next line for a daily report of each population
