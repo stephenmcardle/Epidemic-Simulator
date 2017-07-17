@@ -27,6 +27,11 @@ function step(pop, day) {
 	}
 	for (var i = 0; i < disease_array.length; i++) { // for disease in diseases
 		currDisease = disease_array[i];
+
+		var tempPersons = [];
+		for (var j = 0; j < pop.members.length; j++)
+			tempPersons[j] = numberOfInteractions * daySpecificProb;
+
 		for (var j = 0; j < pop.members.length; j++) { // for person in population
 			currMember = pop.members[j];
 			
@@ -35,10 +40,14 @@ function step(pop, day) {
 				We could try another list/set with everybody that we grab from for interactions and remove a person from the list 
 				once they go through this loop or reach maximum interactions. */
 			//build array of size numberOfInteractions * daySpecificProb of random people to interact with
+			if(tempPersons[j] > 0){
+			
 			var interactWith = [];
 			for (let k = 0; k < numberOfInteractions * daySpecificProb; k++) {
 				let personToInteractWith = Math.floor(Math.random() * (pop.members.length));
 				interactWith.push(pop.members[personToInteractWith]);
+				tempPersons[j]--;
+				tempPersons[personToInteractWith]--;
 			}
 			for (let k = 0; k < interactWith.length; k++) {
 				if (currMember.infections.has(currDisease.getId())) {
@@ -56,6 +65,8 @@ function step(pop, day) {
 				}
 			}
 
+			}
+
 
 			/*  Since we infect both ways when we go through people (the second for loop) we shouldn't have to worry about missing someone
 				and if the person has already had all the alotted interactions they just see if they die today */
@@ -66,6 +77,7 @@ function step(pop, day) {
 				if (Math.random() < (currDisease.fatalityRateUnVacc + currMember.days_infected[currDisease.getId()] * 0.00001)) { //not sure about this condition yet
 					currMember.becomeDead(currDisease);
 					j--;
+					tempPersons.splice(j, 1);
 					//console.log("Person " + currMember.getId() + " died after having " + currDisease.name + " for " + currMember.days_infected[currDisease.getId()] + " days");
 				} else {
 					currMember.days_infected[currDisease.getId()]++;
