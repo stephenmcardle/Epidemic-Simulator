@@ -30,6 +30,10 @@ function step(pop, day) {
 		for (var j = 0; j < pop.members.length; j++) { // for person in population
 			currMember = pop.members[j];
 			
+			/*  To check if a person needs to keep interacting, keep a counter for each person with the interactons they have left
+				Only do the next 2 for loops if the counter is at 0 for this day 
+				We could try another list/set with everybody that we grab from for interactions and remove a person from the list 
+				once they go through this loop or reach maximum interactions. */
 			//build array of size numberOfInteractions * daySpecificProb of random people to interact with
 			var interactWith = [];
 			for (let k = 0; k < numberOfInteractions * daySpecificProb; k++) {
@@ -51,6 +55,10 @@ function step(pop, day) {
 					}
 				}
 			}
+
+
+			/*  Since we infect both ways when we go through people (the second for loop) we shouldn't have to worry about missing someone
+				and if the person has already had all the alotted interactions they just see if they die today */
 
 			// at the end of the day, calculate if this person should die
 			if (currMember.infections.has(currDisease.getId())) {
