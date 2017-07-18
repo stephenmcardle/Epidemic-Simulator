@@ -48,14 +48,12 @@ function step(pop, day) {
 				var interactWith = [];
 				while (tempPersons[j] > 0) {
 					let personToInteractWith = Math.floor(Math.random() * (tempPersons.length));
-					if (tempPersons[personToInteractWith] >= 1) {
-						interactWith.push(pop.members[personToInteractWith]);
-						tempPersons[j]--;
-						tempPersons[personToInteractWith]--;
-						
-						if (tempPersons[personToInteractWith] < 1) {
-							tempPersons.splice(personToInteractWith, 1);
-						}
+					interactWith.push(pop.members[personToInteractWith]);
+					tempPersons[j]--;
+					tempPersons[personToInteractWith]--;
+
+					if (tempPersons[personToInteractWith] < 1) {
+						tempPersons.splice(personToInteractWith, 1);
 					}
 				}
 				for (let k = 0; k < interactWith.length; k++) {
