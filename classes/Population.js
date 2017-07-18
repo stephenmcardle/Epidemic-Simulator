@@ -13,6 +13,9 @@ function Population(arr) {
 	this.getId = function() {
 		return _id;
 	}
+
+	this.lowId = this.members[0].getId();
+	this.highId = this.members[this.members.length - 1].getId();
 	
 	for (let i = 0; i < this.members.length; i++) {
 		this.members[i].setPopulation(this);
@@ -70,6 +73,9 @@ Population.prototype = {
 			console.log("ERROR: This population has 0 infections for this disease");
 			return 0;
 		}
+	},
+	getMemberById: function(memberId) {
+		return this.members[memberId - this.lowId];
 	}
 };
 
