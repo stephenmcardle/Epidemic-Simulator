@@ -4,7 +4,7 @@ const create = run.create;
 var os = require('os');
 
 var NUM_SIM_DAYS = 100;
-var numberOfInteractions = 25;
+var numberOfInteractions = 15;
 
 // These variables are global so they can be accessed in the ./run directory
 person_array = []; //this gets copied into pop.members
@@ -50,7 +50,6 @@ function step(pop, day) {
 				var interactWith = [];
 				while (tempPersons[currId] > 0) {
 					let personToInteractWith = Math.floor(Math.random() * (personsLeft)) + pop.lowId - 1;
-					//have to find a way to get the person by ID instead of index in the next line
 					//console.log(pop.getMemberById(personToInteractWith));
 					interactWith.push(pop.getMemberById(personToInteractWith));
 					tempPersons[currId]--;
@@ -61,6 +60,8 @@ function step(pop, day) {
 						personsLeft--;
 					}
 				}
+				console.log();
+				console.log(interactWith);
 				for (let k = 0; k < interactWith.length; k++) {
 					if (currMember.infections.has(currDisease.getId())) {
 						if (!interactWith[k].infections.has(currDisease.getId())) {
@@ -69,7 +70,7 @@ function step(pop, day) {
 							}
 						}
 					} else {
-						console.log(interactWith[k]);
+						//console.log(interactWith[k]);
 						if (interactWith[k].infections.has(currDisease.getId())) {
 							if (Math.random() < currDisease.transmissibility) {
 								currMember.becomeInfected(currDisease);
