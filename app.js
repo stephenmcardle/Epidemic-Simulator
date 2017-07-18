@@ -28,42 +28,45 @@ function step(pop, day) {
 	for (var i = 0; i < disease_array.length; i++) { // for disease in diseases
 		currDisease = disease_array[i];
 
-		var tempPersons = [];
+		var tempPersons = Array(pop.members.length).fill(numberOfInteractions * daySpecificProb);
+		/*
+		// Changed this to the above line for constant time
 		for (var j = 0; j < pop.members.length; j++)
 			tempPersons[j] = numberOfInteractions * daySpecificProb;
+		*/
 
 		for (var j = 0; j < pop.members.length; j++) { // for person in population
 			currMember = pop.members[j];
 			
 			/*  To check if a person needs to keep interacting, keep a counter for each person with the interactons they have left
-				Only do the next 2 for loops if the counter is at 0 for this day 
+				Only do the next 2 for loops if the counter is > 0 for this day 
 				We could try another list/set with everybody that we grab from for interactions and remove a person from the list 
 				once they go through this loop or reach maximum interactions. */
 			//build array of size numberOfInteractions * daySpecificProb of random people to interact with
-			if(tempPersons[j] > 0){
+			if(tempPersons[j] > 0) {
 			
-			var interactWith = [];
-			for (let k = 0; k < numberOfInteractions * daySpecificProb; k++) {
-				let personToInteractWith = Math.floor(Math.random() * (pop.members.length));
-				interactWith.push(pop.members[personToInteractWith]);
-				tempPersons[j]--;
-				tempPersons[personToInteractWith]--;
-			}
-			for (let k = 0; k < interactWith.length; k++) {
-				if (currMember.infections.has(currDisease.getId())) {
-					if (!interactWith[k].infections.has(currDisease.getId())) {
-						if (Math.random() < currDisease.transmissibility) {
-							interactWith[k].becomeInfected(currDisease);
+				var interactWith = [];
+				for (let k = 0; k < numberOfInteractions * daySpecificProb; k++) {
+					let personToInteractWith = Math.floor(Math.random() * (pop.members.length));
+					interactWith.push(pop.members[personToInteractWith]);
+					tempPersons[j]--;
+					tempPersons[personToInteractWith]--;
+				}
+				for (let k = 0; k < interactWith.length; k++) {
+					if (currMember.infections.has(currDisease.getId())) {
+						if (!interactWith[k].infections.has(currDisease.getId())) {
+							if (Math.random() < currDisease.transmissibility) {
+								interactWith[k].becomeInfected(currDisease);
+							}
 						}
-					}
-				} else {
-					if (interactWith[k].infections.has(currDisease.getId())) {
-						if (Math.random() < currDisease.transmissibility) {
-							currMember.becomeInfected(currDisease);
+					} else {
+						if (interactWith[k].infections.has(currDisease.getId())) {
+							if (Math.random() < currDisease.transmissibility) {
+								currMember.becomeInfected(currDisease);
+							}
 						}
 					}
 				}
-			}
 
 			}
 
