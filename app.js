@@ -28,15 +28,21 @@ function step(pop, day) {
 	for (var i = 0; i < disease_array.length; i++) { // for disease in diseases
 		currDisease = disease_array[i];
 
-		tempPersons = {};
+		tempPersons = [];
 		personsLeft = 0;
 		for (var j = 0; j < pop.members.length; j++) {
-			tempPersons[pop.members[j].getId()] = numberOfInteractions * daySpecificProb;
+			let currId = pop.members[j].getId();
+			let tempObj = { 'id' : currId, 'numInteractions' : Math.floor(numberOfInteractions * daySpecificProb)};
+			tempPersons[j] = tempObj;
 			personsLeft++;
 		}
 
+		//console.log(tempPersons[0]['id']);
 
 		for (var j = 0; j < pop.members.length; j++) { // for person in population
+			if (personsLeft === 1) {
+				break;
+			}
 			currMember = pop.members[j];
 			currId = currMember.getId();
 			
@@ -45,23 +51,38 @@ function step(pop, day) {
 				We could try another list/set with everybody that we grab from for interactions and remove a person from the list 
 				once they go through this loop or reach maximum interactions. */
 			//build array of size numberOfInteractions * daySpecificProb of random people to interact with
-			if(tempPersons[currId] > 0) {
-			
+			if (personsLeft < 3) {
+				//figure out how to handle this
+			} else if(tempPersons[j]['numInteractions'] > 0) {
 				var interactWith = [];
-				while (tempPersons[currId] > 0) {
-					let personToInteractWith = Math.floor(Math.random() * (personsLeft)) + pop.lowId - 1;
-					//console.log(pop.getMemberById(personToInteractWith));
-					interactWith.push(pop.getMemberById(personToInteractWith));
-					tempPersons[currId]--;
-					tempPersons[personToInteractWith]--;
-
-					if (tempPersons[personToInteractWith] < 1) {
-						delete tempPersons.personToInteractWith;
+				while (tempPersons[j]['numInteractions'] > 0 && personsLeft > 2) {
+					let personToInteractWith = Math.floor(Math.random() * (personsLeft - 1));
+					while (personToInteractWith === j) {
+						console.log("random = current");
+						console.log(personsLeft + ' ' + j + '\n');
+						personToInteractWith = Math.floor(Math.random() * (personsLeft - 1));
+					}
+					//console.log(personsLeft);
+					//console.log(personToInteractWith);
+					//console.log(typeof tempPersons[personToInteractWith]['id']);
+					if (pop.getMemberById(tempPersons[personToInteractWith]['id']) === undefined) {
+						console.log(personsLeft);
+						console.log(personToInteractWith);
+					}
+					interactWith.push(pop.getMemberById(tempPersons[personToInteractWith]['id']));
+					tempPersons[j]['numInteractions']--;
+					tempPersons[personToInteractWith]['numInteractions']--;
+					//console.log(tempPersons[personToInteractWith]['numInteractions']);
+					if (tempPersons[personToInteractWith]['numInteractions'] < 1) {
+						tempPersons.splice(personToInteractWith, 1);
 						personsLeft--;
+						if (personToInteractWith < j) {
+							j--;
+						}
 					}
 				}
-				console.log();
-				console.log(interactWith);
+				//console.log();
+				//console.log(interactWith);
 				for (let k = 0; k < interactWith.length; k++) {
 					if (currMember.infections.has(currDisease.getId())) {
 						if (!interactWith[k].infections.has(currDisease.getId())) {
@@ -81,8 +102,9 @@ function step(pop, day) {
 
 			} else {
 				// if the person is out of interactions, remove them
-				delete tempPersons.currId;
+				tempPersons.splice(j, 1);
 				personsLeft--;
+				j--;
 			}
 
 

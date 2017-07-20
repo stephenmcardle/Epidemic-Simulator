@@ -20,7 +20,7 @@ function Disease(name, diseaseInfo) {
 	/* I ASSUME THIS IS WHAT HE MEANT IN THE EMAIL */
 
 	//If we figure out we do not need any of these we can take them out
-	this.transmissibility = 1.0 * ratio;
+	this.transmissibility = 1.0 * ratio / 100;
 	this.prob_of_symptoms = 0.67 * ratio;
 	this.symp_infectivity = 1.0 * ratio;
 	this.asymp_infectivity = 0.5 * ratio;
