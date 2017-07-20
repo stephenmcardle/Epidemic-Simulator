@@ -58,8 +58,8 @@ function step(pop, day) {
 				while (tempPersons[j]['numInteractions'] > 0 && personsLeft > 2) {
 					let personToInteractWith = Math.floor(Math.random() * (personsLeft - 1));
 					while (personToInteractWith === j) {
-						console.log("random = current");
-						console.log(personsLeft + ' ' + j + '\n');
+						//console.log("random = current");
+						//console.log(personsLeft + ' ' + j + '\n');
 						personToInteractWith = Math.floor(Math.random() * (personsLeft - 1));
 					}
 					//console.log(personsLeft);
@@ -116,8 +116,9 @@ function step(pop, day) {
 				//console.log("Person " + currMember.getId() + " has had " + currDisease.name + " for " + currMember.days_infected[currDisease.getId()] + " days");
 				if (Math.random() < (currDisease.fatalityRateUnVacc + currMember.days_infected[currDisease.getId()] * 0.00001)) { //not sure about this condition yet
 					currMember.becomeDead(currDisease);
+					tempPersons.splice(j, 1);
 					j--;
-					delete tempPersons.currId;
+					personsLeft--;
 					//console.log("Person " + currMember.getId() + " died after having " + currDisease.name + " for " + currMember.days_infected[currDisease.getId()] + " days");
 				} else {
 					currMember.days_infected[currDisease.getId()]++;
