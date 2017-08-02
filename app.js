@@ -121,7 +121,7 @@ function step(pop, day) {
 
 			var fatalityRate = currDisease.rateToAdd * currMember.days_infected[currDisease.getId()];
 			if(fatalityRate > currDisease.fatalityRateUnVacc)
-				fatalityRate = fatalityRateUnVacc;
+				fatalityRate = currDisease.fatalityRateUnVacc;
 
 			/*  Since we infect both ways when we go through people (the second for loop) we shouldn't have to worry about missing someone
 				and if the person has already had all the alotted interactions they just see if they die today */
