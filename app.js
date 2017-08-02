@@ -13,7 +13,7 @@ disease_array = [];
 
 const DISEASE_LIST = {
 	"Influenza": [2.5, 0.75], "Diphtheria": [6.5, 7.5], "Smallpox": [6, 30, 3], 
-	"Polio": [6], "Rubella": [6], "Mumps": [5.5, 1], "HIV": [3.5, 85], 
+	"Polio": [6, 26], "Mumps": [5.5, 1], "HIV": [3.5, 85], 
 	"Pertussis": [5.5, 2.35], "SARS": [3.5, 11], "Ebola": [2, 50]
 };
 
