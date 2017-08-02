@@ -15,7 +15,7 @@ function Disease(name, diseaseInfo) {
 		this.fatalityRateVacc = this.fatalityRateUnVacc;
 	}
 	
-	this.rateToAdd = (fatalityRateUnVacc * 100) / (1 / fatalityRateUnVacc);
+	this.rateToAdd = (this.fatalityRateUnVacc * 100) / (1 / this.fatalityRateUnVacc);
 	
 	//TODO figure out where we're going to get the data for these parameters
 
