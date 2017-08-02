@@ -119,6 +119,9 @@ function step(pop, day) {
 			tempPersons.splice(j, 1);
 			//personsLeft--;
 
+			var fatalityRate = currDisease.rateToAdd * currMember.days_infected[currDisease.getId()];
+			if(fatalityRate > currDisease.fatalityRateUnVacc)
+				fatalityRate = fatalityRateUnVacc;
 
 			/*  Since we infect both ways when we go through people (the second for loop) we shouldn't have to worry about missing someone
 				and if the person has already had all the alotted interactions they just see if they die today */
@@ -126,7 +129,7 @@ function step(pop, day) {
 			// at the end of the day, calculate if this person should die
 			if (currMember.infections.has(currDisease.getId())) {
 				//console.log("Person " + currMember.getId() + " has had " + currDisease.name + " for " + currMember.days_infected[currDisease.getId()] + " days");
-				if (Math.random() < (currDisease.fatalityRateUnVacc + currMember.days_infected[currDisease.getId()] * 0.00001)) { //not sure about this condition yet
+				if (Math.random() < fatalityRate) { //not sure about this condition yet
 					currMember.becomeDead(currDisease);
 					tempPersons.splice(j, 1);
 					j--;
