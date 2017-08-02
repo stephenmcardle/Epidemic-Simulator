@@ -45,6 +45,7 @@ Person.prototype = {
 		disease.currentInfected++;
 		disease.totalInfected++;
 		this.getPopulation().incrementNumInfected(disease.getId());
+		
 	},
 	becomeDead: function(disease) {
 		//remove from population

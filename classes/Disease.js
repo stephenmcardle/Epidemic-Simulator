@@ -15,6 +15,16 @@ function Disease(name, diseaseInfo) {
 		this.fatalityRateVacc = this.fatalityRateUnVacc;
 	}
 	
+	var fatalityRates = [];
+	var rateToAdd = (fatalityRateUnVacc * 100) / (1 / fatalityRateUnVacc);
+	fatalityRates.add(rateToAdd);
+	while(fatalityRates[fatalityRates.length-1] != fatalityRateUnVacc) {
+		if(fatalityRates[fatalityRates.length-1] + rateToAdd >= fatalityRateUnVacc)
+			fatalityRates.add(fatalityRateUnVacc);
+		else
+			fatalityRates.add(fatalityRates[fatalityRates.length-1] + rateToAdd);
+	}
+
 	//TODO figure out where we're going to get the data for these parameters
 
 	/* I ASSUME THIS IS WHAT HE MEANT IN THE EMAIL */
